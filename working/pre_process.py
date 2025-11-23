@@ -33,17 +33,21 @@ def preprocess_raw_data(mat_path, type_str):
         np.where(y == 1, 10, 20)
     ])
 
+    # TODO add resample to '250Hz'
+    raw, events = raw.resample(250, events=events, npad='auto')
+
+    # choose 20 chs
+    raw.pick_channels(chs)
+
+    # filter (8-30 Hz)
+    raw.filter(l_freq=8, h_freq=30, verbose=False)
+
     # split 
     epochs = mne.Epochs(raw, events, event_id,
                     tmin=1.0, tmax=3.5,
                     baseline=None, preload=True, verbose=False)
     
-    # choose 20 chs
-    epochs.pick_channels(chs)
-    # filter (8-30 Hz)
-    epochs.filter(l_freq=8, h_freq=30, verbose=False)
-
     X = epochs.get_data() # (n_trials, n_ch, n_time)
     y = np.where(epochs.events[:, 2] == 10, 1, 2)
-    print(fs)
-    return X, y, {'fs':fs, 'ch_names':chs, 'tmin':1.0, 'tmax':3.5, 'n_trials':len(X)}
+
+    return X, y
