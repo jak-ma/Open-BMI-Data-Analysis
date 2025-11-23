@@ -11,7 +11,6 @@ def preprocess_raw_data(mat_path, type_str):
     
     use_type_str = f'EEG_MI_{type_str}'
     data = data0[use_type_str][0, 0]
-    print("Raw x shape in .mat:", data['x'].shape)
 
     # extract EEG -> (ch, time)
     EEG = data['x'].T.astype(np.float64)
