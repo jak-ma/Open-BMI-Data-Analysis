@@ -1,5 +1,4 @@
 import statistics
-from scipy.io import loadmat
 from sklearn.model_selection import KFold, cross_val_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
@@ -29,7 +28,7 @@ def load_data(session, total):
     return x_data, y_data
 
 
-def evaluate_models(x_data, y_data):
+def evaluate_models(x_data_sess01, y_data_sess01, x_data_sess02, y_data_sess02):
     models = {
         'SVM': svm.SVC(C=10, kernel='linear', probability=True),
         'Logistic Regression': LogisticRegression(max_iter=1000),
@@ -38,23 +37,16 @@ def evaluate_models(x_data, y_data):
         'RandomForest': RandomForestClassifier()
     }
     accuracy_results = {name: [] for name in models}
-    for X, y in tqdm(zip(x_data, y_data), desc='Training...'):
-        kf = KFold(n_splits=5, random_state=42, shuffle=True)
-        subject_acc = {name: [] for name in models}
-        for train_idx, test_idx in kf.split(X, y):
-            X_train, X_test = X[train_idx], X[test_idx]
-            y_train, y_test = y[train_idx], y[test_idx]
+    for X_train, y_train, X_test, y_test in tqdm(zip(x_data_sess01, y_data_sess01, x_data_sess02, y_data_sess02), desc='Training...'):
+        
+        # 1.使用 csp 进行特征提取
+        X_train, csp = apply_csp(X_train, y_train)
+        X_test = csp.transform(X_test)
 
-            # 1.使用 csp 进行特征提取
-            X_train, csp = apply_csp(X_train, y_train)
-            X_test = csp.transform(X_test)
-
-            for name, model in models.items():
-                model.fit(X_train, y_train)
-                acc = model.score(X_test, y_test)
-                subject_acc[name].append(acc)
-        for name in models:
-            accuracy_results[name].append(np.mean(subject_acc[name]))    
+        for name, model in models.items():
+            model.fit(X_train, y_train)
+            acc = model.score(X_test, y_test)
+            accuracy_results[name].append(acc)    
 
     return accuracy_results
 
@@ -73,18 +65,18 @@ def visualize_results(accuracy_results, total):
     )
     for name, accuracies in accuracy_results.items():
         bar.add_yaxis(series_name=name, y_axis=accuracies)
-    bar.render("within_subject_accuracy_comparison.html")
+    bar.render("within_subject_cross_session_accuracy_comparison.html")
 
 
 def main():
-    session, total_subjects = 1, 54
     print('Loading data...')
-    x_data, y_data = load_data(session, total_subjects)
+    X_train, y_train = load_data(1, 54)
+    X_test, y_test = load_data(2, 54)
     print('Evaluate...')
-    accuracy_results = evaluate_models(x_data, y_data)
+    accuracy_results = evaluate_models(X_train, y_train, X_test, y_test)
     print_results(accuracy_results)
     print('Visualize...')
-    visualize_results(accuracy_results, total_subjects)
+    visualize_results(accuracy_results, 54)
 
 
 if __name__ == "__main__":
