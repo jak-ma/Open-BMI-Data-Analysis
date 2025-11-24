@@ -1,5 +1,8 @@
 import numpy as np
 from mne.decoding import CSP
+import mne
+### 禁用 INFO 打印
+mne.set_log_level('WARNING')
 
 def apply_csp(X, y, n_components=4):
     """

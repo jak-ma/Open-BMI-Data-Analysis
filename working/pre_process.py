@@ -1,7 +1,8 @@
 import numpy as np
 import scipy.io as sio
 import mne
-
+### 禁用 INFO 打印
+mne.set_log_level('WARNING')
 def preprocess_raw_data(mat_path, type_str):
     # global value
     chs = ['FC5', 'FC3', 'FC1', 'FC2', 'FC4', 'FC6', 'C5', 'C3', 'C1', 'Cz', 'C2', 'C4', 'C6', 'CP5', 'CP3', 'CP1', 'CPz', 'CP2', 'CP4', 'CP6']
