@@ -1,5 +1,5 @@
 import statistics
-from sklearn.model_selection import KFold, cross_val_score
+from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -42,10 +42,14 @@ def evaluate_models(x_data_sess01, y_data_sess01, x_data_sess02, y_data_sess02):
         # 1.使用 csp 进行特征提取
         X_train, csp = apply_csp(X_train, y_train)
         X_test = csp.transform(X_test)
-
+        # 2.进行归一化操作
+        scaler = StandardScaler()
+        X_train_norm = scaler.fit_transform(X_train)
+        X_test_norm = scaler.transform(X_test)
+        
         for name, model in models.items():
-            model.fit(X_train, y_train)
-            acc = model.score(X_test, y_test)
+            model.fit(X_train_norm, y_train)
+            acc = model.score(X_test_norm, y_test)
             accuracy_results[name].append(acc)    
 
     return accuracy_results
@@ -65,7 +69,7 @@ def visualize_results(accuracy_results, total):
     )
     for name, accuracies in accuracy_results.items():
         bar.add_yaxis(series_name=name, y_axis=accuracies)
-    bar.render("within_subject_cross_session_accuracy_comparison.html")
+    bar.render("within_subject_cross_session_accuracy_comparison(scaler).html")
 
 
 def main():
