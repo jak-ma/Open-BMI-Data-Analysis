@@ -69,7 +69,7 @@ def visualize_results(accuracy_results, total):
     )
     for name, accuracies in accuracy_results.items():
         bar.add_yaxis(series_name=name, y_axis=accuracies)
-    bar.render("within_subject_cross_session_accuracy_comparison(scaler).html")
+    bar.render("within_subject_cross_session_accuracy_comparison(n_components:4->8->12).html")
 
 
 def main():
