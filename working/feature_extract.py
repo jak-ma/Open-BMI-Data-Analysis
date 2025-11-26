@@ -19,11 +19,11 @@ if __name__ == '__main__':
     # plot_eeg_channel(X, 1, 1)
     X_csp, _ = apply_csp(X, y)
     print(X_csp.shape)
-    plot_csp_feature_hist(X_csp, 1)
+    # plot_csp_feature_hist(X_csp, 1)
 
-    X_csp = np.log1p(X_csp)
-    print(X_csp.shape)
-    plot_csp_feature_hist(X_csp, 1)
+    # X_csp = np.log1p(X_csp)
+    # print(X_csp.shape)
+    # plot_csp_feature_hist(X_csp, 1)
 
     # plot_csp_feature_hist(X_csp, 1)
     # print(X_csp.shape, y.shape)

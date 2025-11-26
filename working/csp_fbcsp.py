@@ -1,10 +1,10 @@
 import numpy as np
 from mne.decoding import CSP
-import mne
+import mne 
 ### 禁用 INFO 打印
 mne.set_log_level('WARNING')
 
-def apply_csp(X, y, n_components=8):    # TODO 尝试 1 将csp算法输出通道数由4->8->12
+def apply_csp(X, y, n_components=6):    # TODO 尝试 1 将csp算法输出通道数由4->8->12
     """
     X: (n_trials, n_channels, n_times)
     y: (n_trials,)
