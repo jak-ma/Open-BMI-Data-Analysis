@@ -148,7 +148,7 @@ cross-subject analysis 主要采用一种方式：
 
    **时间波形图**（做了垂直偏移变换，为了防止可视化时通道重叠）实际上大部分电位分布在±20之间，见下图
 
-   <img src="https://gitee.com/jak-ma/graph-s/raw/master/imgs/20251128190901159.png" alt="1" style="zoom: 25%;" />
+   <img src="working/utils/EDA/1.png" alt="1" style="zoom: 25%;" />
 
    **EEG 幅度直方图**
 
