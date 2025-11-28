@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.io as sio
 import mne
+from mne.preprocessing import ICA
 ### 禁用 INFO 打印
 mne.set_log_level('WARNING')
 def preprocess_raw_data(mat_path, type_str):
